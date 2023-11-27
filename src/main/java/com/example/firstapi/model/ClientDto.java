@@ -15,9 +15,9 @@ import lombok.NoArgsConstructor;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ClientDto {
 
-	@JsonProperty("id")
-	private Long id;
+    @JsonProperty("id")
+    private Long id;
 
-	@JsonProperty("client_name")
-	private String clientName;
+    @JsonProperty("client_name")
+    private String clientName;
 }

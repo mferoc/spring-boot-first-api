@@ -12,31 +12,48 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/clients")
 @RequiredArgsConstructor
 public class ClientController {
-	private final ClientRepository clientRepository;
-	private final MapperDecorated mapper;
+    private final ClientRepository clientRepository;
+    private final MapperDecorated mapper;
 
-	@GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<ClientDtoResponse> clients() {
-		final List<Client> clientEntityList = clientRepository.findAll();
+    @CrossOrigin
+    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ClientDtoResponse> clients() {
+        final List<Client> clientEntityList = clientRepository.findAll();
 
-		final List<ClientDto> clientDtoList = clientEntityList.stream().map(mapper::toDto).collect(Collectors.toList());
+        final List<ClientDto> clientDtoList = clientEntityList.stream().map(mapper::toDto).collect(Collectors.toList());
 
-		final ClientDtoResponse response = mapper.toResponse(clientDtoList);
+        final ClientDtoResponse response = mapper.toResponse(clientDtoList);
 
-		return new ResponseEntity<>(response, HttpStatus.OK);
-	}
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
-	@PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseStatus(HttpStatus.CREATED)
-	public ClientDto save(@RequestBody ClientDto clientDto) {
-		final Client entity = clientRepository.save(mapper.toEntity(clientDto));
+    @CrossOrigin
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ClientDto> client(@PathVariable("id") String idClient) {
+        final Optional<Client> clientEntityOptional = clientRepository.findById(Long.valueOf(idClient));
 
-		return mapper.toDto(entity);
-	}
+        if (clientEntityOptional.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+        }
+
+        final ClientDto clientDtoResponse = mapper.toDto(clientEntityOptional.get());
+
+        return new ResponseEntity<>(clientDtoResponse, HttpStatus.OK);
+    }
+
+    @CrossOrigin
+    @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.CREATED)
+    public ClientDto save(@RequestBody ClientDto clientDto) {
+        final Client entity = clientRepository.save(mapper.toEntity(clientDto));
+
+        return mapper.toDto(entity);
+    }
 }

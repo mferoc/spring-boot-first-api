@@ -16,6 +16,6 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ClientDtoResponse {
 
-	@JsonProperty("clients")
-	private List<ClientDto> clientDtoList;
+    @JsonProperty("clients")
+    private List<ClientDto> clientDtoList;
 }
