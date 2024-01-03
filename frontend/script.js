@@ -10,8 +10,8 @@ function handleFormSubmition(event) {
 
   if (this.idCliente.value > 0) {
     getCliente(this.idCliente.value);
-  } else if (this.nome.value !== "" && this.nacionalidade.value !== "") {
-    postNovoCliente(this.nome.value, this.nacionalidade.value);
+  } else if (this.nome.value !== "") {
+    postNovoCliente(this.nome.value);
   } else {
     getTodosClientes();
   }
@@ -22,7 +22,6 @@ function getCliente(idCliente) {
     headers: {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "*",
-      "Access-Control-Allow-Origin": "*",
     },
   })
     .then((res) => res.json())
@@ -34,7 +33,6 @@ function getTodosClientes() {
     headers: {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "*",
-      "Access-Control-Allow-Origin": "*",
     },
   })
     .then((res) => res.json())
@@ -43,9 +41,7 @@ function getTodosClientes() {
 
 function postNovoCliente(nome, nacionalidade) {
   const body = {
-    id: 1,
-    client_name: nome,
-    nationality: nacionalidade,
+    client_name: nome
   };
 
   fetch("http://localhost:8080/clients", {
@@ -53,7 +49,6 @@ function postNovoCliente(nome, nacionalidade) {
     headers: {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "*",
-      "Access-Control-Allow-Origin": "*",
       "Content-Type": "application/json",
     },
     body: JSON.stringify(body),
